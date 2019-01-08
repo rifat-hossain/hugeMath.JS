@@ -28,68 +28,53 @@ function refine(str){
     if(str == ''){
         str = 0;
     }
-    if(str.charAt(0) == '.'){
+    /*if(str.charAt(0) == '.'){
         str = '0' + str;
-    }
+    }*/
     return str;
 }
-function isGreater(left_oparend, right_oparend){
-    var neg = false;
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
+function isGreater(main, compare){
+    if(main.indexOf('.') == -1){
+        main += '.';
     }
-    if(left_oparend.indexOf('.') == -1){
-        left_oparend += '.';
+    if(compare.indexOf('.') == -1){
+        compare += '.';
     }
-    var lo = left_oparend.split('.');
-    var ro = right_oparend.split('.');
-    diff = lo[0].length - ro[0].length;
+    m = main.split('.');
+    c = compare.split('.');
+    var diff = m[0].length - c[0].length;
     if(diff > 0){
-        var s = "";
-        for(var i=0; i < diff; i++){
-            s += '0';
+        for(var i = 0; i < diff; i++){
+            c[0] = '0' + c[0];
         }
-        ro[0] = s + ro[0];
     }
     else{
-        var s = "";
-        for(var i=0; i>diff;i--){
-            s += '0';
+        for(var i = 0; i > diff; i--){
+            m[0] = '0' + m[0];
         }
-        lo[0] = s + lo[0];
+    }
+    diff = m[1].length - c[1].length;
+    if(diff > 0){
+        for(var i = 0; i < diff; i++){
+            c[1] += '0';
+        }
+    }
+    else{
+        for(var i = 0; i > diff; i--){
+            m[1] += '0';
+        }
     }
 
-    diff = lo[1].length - ro[1].length;
-    if(diff > 0){
-        var s = "";
-        for(var i=0; i < diff; i++){
-            s += '0';
+
+    for(var i =0; i < m[0].length; i++){
+        if(parseInt(m[0].charAt(i)) > parseInt(c[0].charAt(i))){
+            return true;
         }
-        ro[1] += s;
-    }
-    else{
-        var s = "";
-        for(var i=0; i>diff;i--){
-            s += '0';
-        }
-        lo[1] += s;
-    }
-    delete diff;
-    for(var i=0; i<lo[0].length+lo[1].length;i++){
-        if(i < lo[0].length){
-            if(parseInt(ro[0].charAt(i)) > parseInt(lo[0].charAt(i))){
-                neg = true;
-                break;
-            }
-        }
-        else{
-            if(parseInt(ro[1].charAt(i-ro[1].length)) > parseInt(lo[1].charAt(i-lo[1].length))){
-                neg = true;
-                break;
-            }
+        else if(parseInt(m[0].charAt(i)) < parseInt(c[0].charAt(i))){
+            return false;
         }
     }
-    return !neg;
+    return false;
 }
 
 function add(left_oparend, right_oparend){
@@ -152,117 +137,101 @@ function add(left_oparend, right_oparend){
 }
 
 function subs(left_oparend, right_oparend){
-    var neg = false;
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
-    }
+    var pos = true;
     if(left_oparend.indexOf('.') == -1){
         left_oparend += '.';
     }
-    var lo = left_oparend.split('.');
-    var ro = right_oparend.split('.');
-    diff = lo[0].length - ro[0].length;
+    if(right_oparend.indexOf('.') == -1){
+        right_oparend += '.';
+    }
+    m = left_oparend.split('.');
+    c = right_oparend.split('.');
+    var diff = m[0].length - c[0].length;
     if(diff > 0){
-        var s = "";
-        for(var i=0; i < diff; i++){
-            s += '0';
+        for(var i = 0; i < diff; i++){
+            c[0] = '0' + c[0];
         }
-        ro[0] = s + ro[0];
     }
     else{
-        var s = "";
-        for(var i=0; i>diff;i--){
-            s += '0';
+        for(var i = 0; i > diff; i--){
+            m[0] = '0' + m[0];
         }
-        lo[0] = s + lo[0];
+    }
+    diff = m[1].length - c[1].length;
+    if(diff > 0){
+        for(var i = 0; i < diff; i++){
+            c[1] += '0';
+        }
+    }
+    else{
+        for(var i = 0; i > diff; i--){
+            m[1] += '0';
+        }
     }
 
-    diff = lo[1].length - ro[1].length;
-    if(diff > 0){
-        var s = "";
-        for(var i=0; i < diff; i++){
-            s += '0';
+
+    for(var i =0; i < m[0].length; i++){
+        if(parseInt(m[0].charAt(i)) > parseInt(c[0].charAt(i))){
+            pos = true;
+            break;
         }
-        ro[1] += s;
+        else if(parseInt(m[0].charAt(i)) < parseInt(c[0].charAt(i))){
+            pos = false;
+            break;
+        }
+    }
+
+    var ans = '';
+    var carry = 0;
+    if(pos){
+        for(var i =m[1].length-1; i >= 0; i--){
+            if(parseInt(m[1].charAt(i)) >= parseInt(c[1].charAt(i)) + carry){
+                ans += parseInt(m[1].charAt(i)) - parseInt(c[1].charAt(i)) - carry;
+                carry = 0;
+            }
+            else{
+                ans += parseInt('1' + m[1].charAt(i)) - parseInt(c[1].charAt(i)) - carry;
+                carry = 1;
+            }
+        }
+        ans += '.';
+        for(var i =m[0].length-1; i >= 0; i--){
+            if(parseInt(m[0].charAt(i)) >= parseInt(c[0].charAt(i)) + carry){
+                ans += parseInt(m[0].charAt(i)) - parseInt(c[0].charAt(i)) - carry;
+                carry = 0;
+            }
+            else{
+                ans += parseInt('1' + m[0].charAt(i)) - parseInt(c[0].charAt(i)) - carry;
+                carry = 1;
+            }
+        }
     }
     else{
-        var s = "";
-        for(var i=0; i>diff;i--){
-            s += '0';
-        }
-        lo[1] += s;
-    }
-    delete diff;
-    for(var i=0; i<lo[0].length+lo[1].length;i++){
-        if(i < lo[0].length){
-            if(parseInt(ro[0].charAt(i)) > parseInt(lo[0].charAt(i))){
-                neg = true;
-                break;
-            }
-        }
-        else{
-            if(parseInt(ro[1].charAt(i-ro[1].length)) > parseInt(lo[1].charAt(i-lo[1].length))){
-                neg = true;
-                break;
-            }
-        }
-    }
-    var C=0;
-    var ans = "";
-    var S = 0;
-    if(neg){
-        for(var i =ro[1].length-1; i>=0;i--){
-            if(parseInt(ro[1].charAt(i)) < parseInt(lo[1].charAt(i))+C){
-                S = 10 + parseInt(ro[1].charAt(i)) - parseInt(lo[1].charAt(i)) - C;
-                C = 1;
-            }
-            else if(parseInt(ro[1].charAt(i)) >= parseInt(lo[1].charAt(i))+C){
-                S = parseInt(ro[1].charAt(i)) - parseInt(lo[1].charAt(i)) - C;
-                C = 0;
-            }
-            ans += S.toString();
-        }
-        ans += '.';
-        for(var i =ro[0].length-1; i>=0;i--){
-            if(parseInt(ro[0].charAt(i)) < parseInt(lo[0].charAt(i))+C){
-                S = 10 + parseInt(ro[0].charAt(i)) - parseInt(lo[0].charAt(i)) - C;
-                C = 1;
+        for(var i =m[1].length-1; i >= 0; i--){
+            if(parseInt(c[1].charAt(i)) >= parseInt(m[1].charAt(i)) + carry){
+                ans += parseInt(c[1].charAt(i)) - parseInt(m[1].charAt(i)) - carry;
+                carry = 0;
             }
             else{
-                S = parseInt(ro[0].charAt(i)) - parseInt(lo[0].charAt(i)) - C;
-                C = 0;
+                ans += parseInt('1' + c[1].charAt(i)) - parseInt(m[1].charAt(i)) - carry;
+                carry = 1;
             }
-            ans += S.toString();
+        }
+        ans += '.';
+        for(var i =m[0].length-1; i >= 0; i--){
+            if(parseInt(c[0].charAt(i)) >= parseInt(m[0].charAt(i)) + carry){
+                ans += parseInt(c[0].charAt(i)) - parseInt(m[0].charAt(i)) - carry;
+                carry = 0;
+            }
+            else{
+                ans += parseInt('1' + c[0].charAt(i)) - parseInt(m[0].charAt(i)) - carry;
+                carry = 1;
+            }
         }
         ans += '-';
-        return reverseString(ans);
     }
-    else {
-        for(var i =ro[1].length-1; i>=0;i--){
-            if(parseInt(lo[1].charAt(i)) < parseInt(ro[1].charAt(i))+C){
-                S = 10 + parseInt(lo[1].charAt(i)) - parseInt(ro[1].charAt(i)) - C;
-                C = 1;
-            }
-            else if(parseInt(lo[1].charAt(i)) >= parseInt(ro[1].charAt(i))+C){
-                S = parseInt(lo[1].charAt(i)) - parseInt(ro[1].charAt(i)) - C;
-                C = 0;
-            }
-            ans += S.toString();
-        }
-        ans += '.';
-        for(var i =ro[0].length-1; i>=0;i--){
-            if(parseInt(lo[0].charAt(i)) < parseInt(ro[0].charAt(i))+C){
-                S = 10 + parseInt(lo[0].charAt(i)) - parseInt(ro[0].charAt(i)) - C;
-                C = 1;
-            }
-            else{
-                S = parseInt(lo[0].charAt(i)) - parseInt(ro[0].charAt(i)) - C;
-                C = 0;
-            }
-            ans += S.toString();
-        }
-        return reverseString(ans);
-    }
+
+    return refine(reverseString(ans));
 }
 
 function mult_long(left_oparend, right_oparend){
@@ -316,13 +285,10 @@ function mult_lattice(left_oparend, right_oparend){
         }
         for(var n = i; n >= lim; n--){
             s2 += parseInt((parseInt(left_oparend.charAt(n)) * parseInt(right_oparend.charAt(i-n))) / 10);
-            //console.log(left_oparend.charAt(n) +"*"+right_oparend.charAt(i-n) + "/10=" + parseInt((parseInt(left_oparend.charAt(n)) * parseInt(right_oparend.charAt(i-n))) / 10));
             if(n>0){
                 s2 += (parseInt(left_oparend.charAt(n-1)) * parseInt(right_oparend.charAt(i-n))) % 10;
-                //console.log(left_oparend.charAt(n-1) + "*" + right_oparend.charAt(i-n) + "%10=" + (parseInt(left_oparend.charAt(n-1)) * parseInt(right_oparend.charAt(i-n))) % 10);
             }
         }
-        //console.log("::::"+s1 + "%10+" + s2 + "/10=" + parseInt(s1 % 10 + parseInt(s2 / 10)));
         ans += s1 % 10 + parseInt(s2 / 10);
         s1 = s2;
     }
@@ -333,13 +299,10 @@ function mult_lattice(left_oparend, right_oparend){
         }
         for(var n = i; right_oparend.length - n > lim; n++){
             s2 += parseInt(left_oparend.charAt(left_oparend.length - n + i -1)) * parseInt(right_oparend.charAt(n)) % 10;
-            //console.log(left_oparend.charAt(left_oparend.length - n + i - 1) +"*"+ right_oparend.charAt(n) + "%10=" + parseInt(left_oparend.charAt(left_oparend.length - n + i - 1)) * parseInt(right_oparend.charAt(n)) % 10);
             if(n+1 < right_oparend.length){
                 s2 += parseInt(parseInt(left_oparend.charAt(left_oparend.length - n + i -1)) * parseInt(right_oparend.charAt(n + 1)) / 10);
-                //console.log(left_oparend.charAt(left_oparend.length - n + i - 1) +"*"+ right_oparend.charAt(n + 1) + "/10=" + parseInt(parseInt(left_oparend.charAt(left_oparend.length - n + i - 1)) * parseInt(right_oparend.charAt(n + 1)) / 10));
             }
         }
-        //console.log("::::"+s1 + "%10+"+s2+"/10="+ (s1 % 10 + parseInt(parseInt(s2) / 10)));
         ans += s1 % 10 + parseInt(parseInt(s2) / 10);
         s1 = s2;
     }
@@ -348,8 +311,9 @@ function mult_lattice(left_oparend, right_oparend){
 }
 
 function divi(left_oparend, right_oparend, range){
-    var useR = false;
+    var ans = '';
     var dividend = "";
+    range++;
     if(right_oparend.indexOf('.') == -1){
         right_oparend += '.';
     }
@@ -358,21 +322,42 @@ function divi(left_oparend, right_oparend, range){
     }
     lo = left_oparend.split('.');
     ro = right_oparend.split('.');
-    l0 = lo[0].length;
-    l1 = lo[1].length;
     r0 = ro[0].length;
-    r1 = ro[1].length;
+    l1 = lo[1].length;
     delete lo;
     delete ro;
+    left_oparend = left_oparend.replace('.','');
+    if(range >= l1){
+        for(var i = 0; i<range-l1;i++){
+            left_oparend += '0';
+        }
+    }
+    else{
+        left_oparend = left_oparend.substring(0,left_oparend.length - l1 + range);
+    }
+    dividend = left_oparend.substring(0,r0);
+    for(var i=r0; i < left_oparend.length; i++){
+        var tmp = _divi_helper(dividend.toString(), right_oparend.toString());
+        ans += tmp.result.toString();
+        dividend = tmp.remender;
+        var p =dividend.indexOf('.');
+        if(p == -1){
+            dividend += left_oparend.charAt(i).toString();
+        }
+        else{
+            dividend = dividend.insert(p, left_oparend.charAt(i).toString());
+        }
+    }
 
-    return "Unimplemented";
+    return refine(ans.insert(ans.length - range + 1,'.'));
 }
 function _divi_helper(dividend, divisor){
-    var result, remender;
-    for(result = 0; result < 10; result++){
-        if(mult_long(divisor, result) > dividend){
+    var remender = 0;
+    var result = 1;
+    for(; result <= 10; result++){
+        if(isGreater(mult_long(divisor, result.toString()), dividend)){
             result--;
-            remender = dividend - mult_long(divisor, result);
+            remender = refine(subs(dividend.toString(), mult_long(divisor, result.toString()).toString()).toString()).toString();
             break;
         }
     }
