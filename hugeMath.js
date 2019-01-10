@@ -77,15 +77,15 @@ function isGreater(main, compare){
     return false;
 }
 
-function add(left_oparend, right_oparend){
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
+function add(left_operand, right_operand){
+    if(right_operand.indexOf('.') == -1){
+        right_operand += '.';
     }
-    if(left_oparend.indexOf('.') == -1){
-        left_oparend += '.';
+    if(left_operand.indexOf('.') == -1){
+        left_operand += '.';
     }
-    var lo = left_oparend.split('.');
-    var ro = right_oparend.split('.');
+    var lo = left_operand.split('.');
+    var ro = right_operand.split('.');
     var diff = lo[0].length - ro[0].length;
     if(diff > 0){
         var s = "";
@@ -136,16 +136,16 @@ function add(left_oparend, right_oparend){
     return reverseString(ans);
 }
 
-function subs(left_oparend, right_oparend){
+function subt(left_operand, right_operand){
     var pos = true;
-    if(left_oparend.indexOf('.') == -1){
-        left_oparend += '.';
+    if(left_operand.indexOf('.') == -1){
+        left_operand += '.';
     }
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
+    if(right_operand.indexOf('.') == -1){
+        right_operand += '.';
     }
-    m = left_oparend.split('.');
-    c = right_oparend.split('.');
+    m = left_operand.split('.');
+    c = right_operand.split('.');
     var diff = m[0].length - c[0].length;
     if(diff > 0){
         for(var i = 0; i < diff; i++){
@@ -234,23 +234,23 @@ function subs(left_oparend, right_oparend){
     return refine(reverseString(ans));
 }
 
-function mult_long(left_oparend, right_oparend){
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
+function mult_long(left_operand, right_operand){
+    if(right_operand.indexOf('.') == -1){
+        right_operand += '.';
     }
-    if(left_oparend.indexOf('.') == -1){
-        left_oparend += '.';
+    if(left_operand.indexOf('.') == -1){
+        left_operand += '.';
     }
-    var point = right_oparend.length - right_oparend.indexOf('.') + left_oparend.length - left_oparend.indexOf('.') - 2;
-    right_oparend = right_oparend.replace('.','');
-    left_oparend = left_oparend.replace('.','');
+    var point = right_operand.length - right_operand.indexOf('.') + left_operand.length - left_operand.indexOf('.') - 2;
+    right_operand = right_operand.replace('.','');
+    left_operand = left_operand.replace('.','');
     var C = 0;
     var ans = "";
-    for(var i=2; i <= right_oparend.length + left_oparend.length; i++){
+    for(var i=2; i <= right_operand.length + left_operand.length; i++){
         var S = C;
         C = 0;
         for(var j=1; j <= i; j++){
-            var temp = parseInt(left_oparend.charAt(left_oparend.length - j)) * parseInt(right_oparend.charAt(right_oparend.length - i+j));
+            var temp = parseInt(left_operand.charAt(left_operand.length - j)) * parseInt(right_operand.charAt(right_operand.length - i+j));
             if(temp){
                 S += temp;
             }
@@ -263,44 +263,44 @@ function mult_long(left_oparend, right_oparend){
     ans = reverseString(ans.insert(point,'.'));
     return refine(ans);
 }
-function mult_lattice(left_oparend, right_oparend){
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
+function mult_lattice(left_operand, right_operand){
+    if(right_operand.indexOf('.') == -1){
+        right_operand += '.';
     }
-    if(left_oparend.indexOf('.') == -1){
-        left_oparend += '.';
+    if(left_operand.indexOf('.') == -1){
+        left_operand += '.';
     }
-    var point = right_oparend.length - right_oparend.indexOf('.') + left_oparend.length - left_oparend.indexOf('.') - 2;
-    right_oparend = right_oparend.replace('.','');
-    left_oparend = left_oparend.replace('.','');
+    var point = right_operand.length - right_operand.indexOf('.') + left_operand.length - left_operand.indexOf('.') - 2;
+    right_operand = right_operand.replace('.','');
+    left_operand = left_operand.replace('.','');
     var s1 = 0;
     var s2 = 0;
     var lim = 0;
     var ans = "";
-    for(var i =0; i < left_oparend.length; i++){
+    for(var i =0; i < left_operand.length; i++){
         lim = 0;
         s2 = 0;
-        if(i > right_oparend.length-1){
-            lim = i - right_oparend.length+1;
+        if(i > right_operand.length-1){
+            lim = i - right_operand.length+1;
         }
         for(var n = i; n >= lim; n--){
-            s2 += parseInt((parseInt(left_oparend.charAt(n)) * parseInt(right_oparend.charAt(i-n))) / 10);
+            s2 += parseInt((parseInt(left_operand.charAt(n)) * parseInt(right_operand.charAt(i-n))) / 10);
             if(n>0){
-                s2 += (parseInt(left_oparend.charAt(n-1)) * parseInt(right_oparend.charAt(i-n))) % 10;
+                s2 += (parseInt(left_operand.charAt(n-1)) * parseInt(right_operand.charAt(i-n))) % 10;
             }
         }
         ans += s1 % 10 + parseInt(s2 / 10);
         s1 = s2;
     }
-    for(var i=0; i < right_oparend.length; i++){
+    for(var i=0; i < right_operand.length; i++){
         lim = s2 = 0;
-        if(right_oparend.length - i > left_oparend.length){
-            lim = right_oparend.length - i - left_oparend.length;
+        if(right_operand.length - i > left_operand.length){
+            lim = right_operand.length - i - left_operand.length;
         }
-        for(var n = i; right_oparend.length - n > lim; n++){
-            s2 += parseInt(left_oparend.charAt(left_oparend.length - n + i -1)) * parseInt(right_oparend.charAt(n)) % 10;
-            if(n+1 < right_oparend.length){
-                s2 += parseInt(parseInt(left_oparend.charAt(left_oparend.length - n + i -1)) * parseInt(right_oparend.charAt(n + 1)) / 10);
+        for(var n = i; right_operand.length - n > lim; n++){
+            s2 += parseInt(left_operand.charAt(left_operand.length - n + i -1)) * parseInt(right_operand.charAt(n)) % 10;
+            if(n+1 < right_operand.length){
+                s2 += parseInt(parseInt(left_operand.charAt(left_operand.length - n + i -1)) * parseInt(right_operand.charAt(n + 1)) / 10);
             }
         }
         ans += s1 % 10 + parseInt(parseInt(s2) / 10);
@@ -310,42 +310,42 @@ function mult_lattice(left_oparend, right_oparend){
     return refine(ans.insert(ans.length - point,'.'));
 }
 
-function divi(left_oparend, right_oparend, range){
+function divi(left_operand, right_operand, range){
     var ans = '';
     var dividend = "";
     range++;
-    if(right_oparend.indexOf('.') == -1){
-        right_oparend += '.';
+    if(right_operand.indexOf('.') == -1){
+        right_operand += '.';
     }
-    if(left_oparend.indexOf('.') == -1){
-        left_oparend += '.';
+    if(left_operand.indexOf('.') == -1){
+        left_operand += '.';
     }
-    lo = left_oparend.split('.');
-    ro = right_oparend.split('.');
+    lo = left_operand.split('.');
+    ro = right_operand.split('.');
     r0 = ro[0].length;
     l1 = lo[1].length;
     delete lo;
     delete ro;
-    left_oparend = left_oparend.replace('.','');
+    left_operand = left_operand.replace('.','');
     if(range >= l1){
         for(var i = 0; i<range-l1;i++){
-            left_oparend += '0';
+            left_operand += '0';
         }
     }
     else{
-        left_oparend = left_oparend.substring(0,left_oparend.length - l1 + range);
+        left_operand = left_operand.substring(0,left_operand.length - l1 + range);
     }
-    dividend = left_oparend.substring(0,r0);
-    for(var i=r0; i < left_oparend.length; i++){
-        var tmp = _divi_helper(dividend.toString(), right_oparend.toString());
+    dividend = left_operand.substring(0,r0);
+    for(var i=r0; i < left_operand.length; i++){
+        var tmp = _divi_helper(dividend.toString(), right_operand.toString());
         ans += tmp.result.toString();
         dividend = tmp.remender;
         var p =dividend.indexOf('.');
         if(p == -1){
-            dividend += left_oparend.charAt(i).toString();
+            dividend += left_operand.charAt(i).toString();
         }
         else{
-            dividend = dividend.insert(p, left_oparend.charAt(i).toString());
+            dividend = dividend.insert(p, left_operand.charAt(i).toString());
         }
     }
 
@@ -357,9 +357,12 @@ function _divi_helper(dividend, divisor){
     for(; result <= 10; result++){
         if(isGreater(mult_long(divisor, result.toString()), dividend)){
             result--;
-            remender = refine(subs(dividend.toString(), mult_long(divisor, result.toString()).toString()).toString()).toString();
+            remender = refine(subt(dividend.toString(), mult_long(divisor, result.toString()).toString()).toString()).toString();
             break;
         }
+    }
+    if(result == 10){
+        result = 0;
     }
     return {result, remender};
 }
