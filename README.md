@@ -1,4 +1,4 @@
-# hugeMath
+# hugeMath.JS
 ## Introduction
 Every **Data Types** has a limited [value range](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges) (e.g. value range of int32 is -2,147,483,648 to 2,147,483,647). Mathmetical operations like addition, subtraction, multification or divition occurs among these numerical data types and operation result has to be bound within the limit.
 
